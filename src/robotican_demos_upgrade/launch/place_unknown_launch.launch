@@ -12,8 +12,9 @@ rosservice call /pick_go "{}"
 
 <launch>
 
-    <!-- <include file="$(find robotican_demos_upgrade)/launch/demo_pick_new.launch"> </include> -->
-
-    <node pkg="rosservice" type="rosservice" name="pick_ser" args="call --wait /pick_go '{}' " output="screen"> </node>
+    <!-- <include file="$(find robotican_demos_upgrade)/launch/demo_pick_new.launch"> </include> --> <!-- we expect this is already running -->
+    <node pkg="rosservice" type="rosservice" name="pick_ser" args="call --wait /place_go_table '{}' " output="screen"> </node>
             
 </launch>
+
+

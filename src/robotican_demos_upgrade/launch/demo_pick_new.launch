@@ -16,12 +16,13 @@ rosservice call /pick_go "{}"
     <arg name="end_position" default="to_cheak" />
     <arg name="give_position" default="give" />
     
-    <!--<node name="poses" pkg="tal" type="poses_srv" output="screen" required="true">
+    <!--
+	<node name="poses" pkg="tal" type="poses_srv" output="screen" required="true">
         <param name="~end_position_name" value="$(arg end_position)"/>
         <param name="~give_position_name" value="$(arg give_position)"/>
-        <param name="~object_name" value="can"/>
-        
-    </node>-->
+        <param name="~object_name" value="can"/>        
+    	</node>
+     -->
     
     
     
@@ -33,10 +34,11 @@ rosservice call /pick_go "{}"
 
     
     <!--
-    <node name="place" pkg="robotican_demos_upgrade" type="place_can" output="screen" required="true">
+    	<node name="place" pkg="robotican_demos_upgrade" type="place_can" output="screen" required="true">
         <param name="~start_position_name" value="$(arg start_position)"/>
         <param name="~object_name" value="can"/>
-    </node>-->
+    	</node>
+    -->
 
 
     <node name="place_table" pkg="robotican_demos_upgrade" type="place_can_table" output="screen" required="true">
@@ -45,8 +47,8 @@ rosservice call /pick_go "{}"
     </node>
 
 
-<!--give object to person with yellow shirt-->
- <node name="place_person" pkg="robotican_demos_upgrade" type="place_can_person" output="screen" required="true">
+    <!--give object to person with yellow shirt-->
+    <node name="place_person" pkg="robotican_demos_upgrade" type="place_can_person" output="screen" required="true">
         <param name="~start_position_name" value="$(arg start_position)"/>
         <param name="~object_name" value="can"/>
     </node>
@@ -79,7 +81,7 @@ rosservice call /pick_go "{}"
         <rosparam file="$(find object_detection)/config/table_object.yaml" command="load"/>
     </node>
 
-       <!-- Ditect person -color based : yellow shirt -->
+       <!-- Detect person-color based on yellow shirt -->
     <node name="find_object_node_person" pkg="object_detection" type="find_objects_node_person" output="screen">
         <param name="~object_id" value="0"/>
         <param name="~depth_topic1" value="/kinect2/qhd/points"/>   #/kinect2/qhd/points

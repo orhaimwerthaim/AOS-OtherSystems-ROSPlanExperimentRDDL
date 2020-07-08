@@ -28,14 +28,13 @@ def push_elevator_button_cb(req):
         os.system('roslaunch robotican_demos_upgrade push_button_launch.launch')   
         '''   
 
-        global f_already_launched  
-        global inTime, outTime
+        global f_already_launched, inTime, outTime
         inTime = datetime.now()
 
         ##these are manually executing launches, need to figure out a decent way to do it, but later
         if( not f_already_launched ): 
             p = subprocess.Popen(["roslaunch /home/lab16/catkin_ws_elevator/src/robotican_demos_upgrade/launch/push_button_launch.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True) 
-
+            f_already_launched = True
         else:
             print('\n\nServer is not running for the first time!\n')
             time.sleep(2)
@@ -56,9 +55,7 @@ def push_elevator_button_cb(req):
                 continue
         
         print("Output of the last servise:\n\n", log)
-        print ("\n\nTerminating the push button node!\n")
-        p.kill()
-        p.terminate()       
+        print ("\n\nTerminating the push button node!\n")              
 
         return push_buttonResponse(message)
     except:

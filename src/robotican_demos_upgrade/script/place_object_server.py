@@ -28,14 +28,8 @@ def place_unknown_cb(req):
         inTime = datetime.now()
 
         ##these are manually executing launches, need to figure out a decent way to do it, but later
-        if( not f_already_launched ): 
-            ##I suppose that place is only fired when the robot successfully picked the object
-            p = subprocess.Popen(["roslaunch robotican_demos_upgrade place_unknown_launch.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True)
-        else:
-            print('\nServer is not running for the first time!\n')
-            time.sleep(2)
-            p = subprocess.Popen(["rosservice call --wait /place_go '{}' "], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True)
-
+        p = subprocess.Popen(["roslaunch robotican_demos_upgrade place_unknown_launch.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True)
+   
         log = ""
         message = ""
         while True:
@@ -52,8 +46,7 @@ def place_unknown_cb(req):
         
         print("Output of the last servise:\n\n", log)
         print ("\n\nTerminating the push button node!\n")
-        p.kill()
-        p.terminate()       
+        
 
         return place_unknownResponse(message)
     except:
@@ -63,7 +56,7 @@ def place_unknown_cb(req):
 def pick_unknown_call():
     rospy.init_node('place_unknown_server')
     s = rospy.Service('place_unknown', place_unknown, place_unknown_cb)
-    print("Ready to pick the object!")
+    print("Ready to place the object!")
     rospy.spin()
     
 if __name__ == "__main__":

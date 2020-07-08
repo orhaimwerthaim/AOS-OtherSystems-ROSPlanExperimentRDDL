@@ -108,13 +108,16 @@ def robust_move_group():
     
     import os
     ##remember that the below print statements are required, don't remove those two print statements
+    ##also it can open even when last plan was not true, be careful, need to resolve after the deadline
     if (abs((float)(position_x - wpose.position.x)) < 0.1):
-        print('\nOpening the elevator door now ... the gripper is ', abs((float)(position_x - wpose.position.x)), 'much far to the button')
+        print('\nOpening the elevator door now ... the gripper is ', abs((float)(position_x - wpose.position.x)), 'far to the button')
         os.system('roslaunch pygazebo_ros_gazebo_elevator elevator_gate_opener.launch') #default floor_num:="1"
         print("Successfully pushed the button, (success : True)")
 
     else:
         print("Could not push the button, (success : False)")
+
+    print("after if else")
     
 def push_button_go():
     global success_x, success_y, success_z, flag
