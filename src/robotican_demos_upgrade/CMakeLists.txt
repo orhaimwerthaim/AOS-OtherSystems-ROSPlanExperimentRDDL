@@ -78,6 +78,7 @@ add_service_files(
    AddTwoInts.srv
    pick_unknown.srv
    place_unknown.srv
+   robot_navigation.srv
 )
 
 ## Generate actions in the 'action' folder
