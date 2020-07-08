@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: elevator
+Description: Description of elevator
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: actionlib actionlib_msgs roscpp

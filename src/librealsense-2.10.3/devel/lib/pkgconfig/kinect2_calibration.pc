@@ -1,0 +1,8 @@
+prefix=/home/lab16/catkin_ws/src/librealsense-2.10.3/devel
+
+Name: kinect2_calibration
+Description: Description of kinect2_calibration
+Version: 0.0.1
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: filters
+Description: Description of filters
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lfilters
+Requires: 

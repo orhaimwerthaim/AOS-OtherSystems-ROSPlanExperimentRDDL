@@ -1,0 +1,8 @@
+prefix=/home/lab16/catkin_ws/src/librealsense-2.10.3/devel
+
+Name: generate_srv
+Description: Description of generate_srv
+Version: 0.0.0
+Cflags: -I/home/lab16/catkin_ws/src/librealsense-2.10.3/devel/include
+Libs: -L${prefix}/lib 
+Requires: 

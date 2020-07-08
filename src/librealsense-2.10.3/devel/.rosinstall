@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/lab16/catkin_ws/src/librealsense-2.10.3/devel/setup.sh

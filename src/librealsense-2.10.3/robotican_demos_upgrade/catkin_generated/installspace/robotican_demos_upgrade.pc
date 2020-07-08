@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: robotican_demos_upgrade
+Description: Description of robotican_demos_upgrade
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: roscpp rospy generate_srv std_msgs moveit_core moveit_ros_planning moveit_ros_planning_interface

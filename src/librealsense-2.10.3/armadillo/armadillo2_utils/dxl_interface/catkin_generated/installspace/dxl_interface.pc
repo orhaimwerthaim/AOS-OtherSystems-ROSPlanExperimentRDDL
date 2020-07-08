@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: dxl_interface
+Description: Description of dxl_interface
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -ldxl_interface
+Requires: dynamixel_sdk

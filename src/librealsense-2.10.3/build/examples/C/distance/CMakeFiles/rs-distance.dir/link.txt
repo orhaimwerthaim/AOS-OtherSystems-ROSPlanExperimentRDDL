@@ -1,0 +1,1 @@
+/usr/bin/cc   -pthread   -fPIC -pedantic -g -D_BSD_SOURCE   -mssse3 -mavx2   CMakeFiles/rs-distance.dir/rs-distance.c.o  -o rs-distance -rdynamic ../../../librealsense2.so.2.10.3 -lGLU -lGL -lm -lglfw -lusb-1.0 -Wl,-rpath,/home/lab16/catkin_ws/src/librealsense-2.10.3/build: 

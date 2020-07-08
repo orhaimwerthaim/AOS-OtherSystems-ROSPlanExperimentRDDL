@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: armadillo2_bgu
+Description: Description of armadillo2_bgu
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: actionlib_msgs message_runtime
