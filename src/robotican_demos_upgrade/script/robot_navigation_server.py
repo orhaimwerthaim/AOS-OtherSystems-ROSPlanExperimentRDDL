@@ -25,28 +25,51 @@ def robot_navigation_cb(req):
         global f_already_launched, inTime, outTime
         inTime = datetime.now()
 
+        print("action :", req.nav_name)
         ##these are manually executing launches, need to figure out a decent way to do it, but later
-        p = subprocess.Popen(["roslaunch /home/lab16/catkin_ws_elevator/src/robotican_demos_upgrade/launch/robot_navigation_launch.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True) 
+        if(req.nav_name == "elevator"):           
+            p = subprocess.Popen(["roslaunch /home/lab16/catkin_ws_elevator/src/robotican_demos_upgrade/launch/robot_navigation_elevator.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True) 
         
+        elif(req.nav_name == "enter_elevator"):            
+            p = subprocess.Popen(["roslaunch /home/lab16/catkin_ws_elevator/src/robotican_demos_upgrade/launch/robot_navigation_enter_elevator.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True)
+
+        elif(req.nav_name == "corridor"):            
+            p = subprocess.Popen(["roslaunch /home/lab16/catkin_ws_elevator/src/robotican_demos_upgrade/launch/robot_navigation_corridor.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True)
+
+        elif(req.nav_name == "auditorium"):            
+            p = subprocess.Popen(["roslaunch /home/lab16/catkin_ws_elevator/src/robotican_demos_upgrade/launch/robot_navigation_auditorium.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True)
+
+        elif(req.nav_name == "lab211"):            
+            p = subprocess.Popen(["roslaunch /home/lab16/catkin_ws_elevator/src/robotican_demos_upgrade/launch/robot_navigation_lab211.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True)
+        
+        elif(req.nav_name == "outside_lab211"):            
+            p = subprocess.Popen(["roslaunch /home/lab16/catkin_ws_elevator/src/robotican_demos_upgrade/launch/robot_navigation_outside_lab211.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True)
+        
+        ##by default it will be near the elevator
+        else:           
+            p = subprocess.Popen(["roslaunch /home/lab16/catkin_ws_elevator/src/robotican_demos_upgrade/launch/robot_navigation_elevator.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True)
+
         log = ""
         message = ""
         while True:
             o = p.stdout.readline()
             log += o
-            if "success" in o and "True" in o:
+            if "reached" in o and "You" in o:
                 message = "true"
                 break
-            elif "success" in o and "False" in o:
+            elif "robot" in o and "failed" in o:
                 message = "false"
                 break
             else:
                 continue
         
-        print("Output of the last servise:\n\n", log)
-        print ("\n\nTerminating the push button node!\n")              
+        print("Output of the last service:\n\n", log)
+        print ("\n\nTerminating the navigation node!\n")              
 
-        return robot_navigationResponse(message)
+        p.terminate()
+        return robot_navigationResponse(message)        
     except:
+        p.terminate()
         return robot_navigationResponse(message)
 
 
