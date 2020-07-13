@@ -201,6 +201,10 @@ add_executable(arm_trajectory src/arm_trajectory.cpp)
 add_dependencies(arm_trajectory robotican_demos_upgrade_generate_messages_cpp)
 target_link_libraries(arm_trajectory ${catkin_LIBRARIES})
 
+add_executable(poses_srv src/poses_srv.cpp)
+add_dependencies(poses_srv robotican_demos_upgrade_generate_messages_cpp)
+target_link_libraries(poses_srv ${catkin_LIBRARIES})
+
 
 
 #add_dependencies( demo_pick_node robotican_common_generate_messages_cpp )

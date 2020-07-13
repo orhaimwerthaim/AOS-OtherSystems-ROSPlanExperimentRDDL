@@ -54,8 +54,7 @@ def push_elevator_button_cb(req):
             else:
                 continue
         
-        print("Output of the last servise:\n\n", log)
-        print ("\n\nTerminating the push button node!\n")              
+        print("Output of the last servise:\n\n", log)          
 
         return push_buttonResponse(message)
     except:
