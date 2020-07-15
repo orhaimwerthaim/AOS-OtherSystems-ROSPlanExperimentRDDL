@@ -10,7 +10,7 @@ def push_button_client():
     rospy.wait_for_service('robot_navigation')
     try:
         robot_navigation_req = rospy.ServiceProxy('robot_navigation', robot_navigation) 
-        resp1 = robot_navigation_req("elevator", "armadillo", "location1", "location2", "floor")     
+        resp1 = robot_navigation_req("corridor", "armadillo", "location1", "location2", "floor")     
         print("responding!")   
         return resp1.response
     except rospy.ServiceException as e:

@@ -257,6 +257,7 @@ def push_button_callback(coordinates):
     position_x = coordinates.markers[1].pose.pose.position.x
     position_y = coordinates.markers[1].pose.pose.position.y
     position_z = coordinates.markers[1].pose.pose.position.z
+    print("poses:", position_x, position_y, position_z)
 
 def set_all_the_hardware():
     import rospy

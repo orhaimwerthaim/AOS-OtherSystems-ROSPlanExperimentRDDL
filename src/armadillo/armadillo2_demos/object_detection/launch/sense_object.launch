@@ -20,7 +20,7 @@ rosservice call /pick_go "{}"
         <param name="~object_id" value="1"/>        
         <param name="~depth_topic2" value="/intel_d435/depth_registered/points"/>   
         <param name="~depth_topic1" value="/kinect2/qhd/points"/>  
-        <rosparam file="$(find object_detection)/config/green_button_object.yaml" command="load"/>
+        <rosparam file="$(find object_detection)/config/red_object.yaml" command="load"/>
     </node>
     
    

@@ -63,34 +63,36 @@ ros::Publisher chatter16_new;
 Point_t point;
 
 std::vector<geometry_msgs::PoseStamped::ConstPtr> pose;
-double x_current = 0;
-double z_cuurent = 0;
+double x_current = 0.0;
+double z_cuurent = 0.0;
 
-float x_real_can =0;
-float y_real_can =0;
-float z_real_can =0;
-
-
+float x_real_can =0.0;
+float y_real_can =0.0;
+float z_real_can =0.0;
 
 
-void cb_can(ar_track_alvar_msgs::AlvarMarkers req) {
-    if (!req.markers.empty()) {
-      //tf::Quaternion q(req.markers[0].pose.pose.orientation.x, req.markers[0].pose.pose.orientation.y, req.markers[0].pose.pose.orientation.z, req.markers[0].pose.pose.orientation.w);
-      //tf::Matrix3x3 m(q);
-      //double roll, pitch, yaw;
-      //m.getRPY(roll, pitch, yaw);
-      //ROS_INFO("roll, pitch, yaw=%1.2f  %1.2f  %1.2f", roll, pitch, yaw);
-      // roll  --> rotate around vertical axis
-      // pitch --> rotate around horizontal axis
-      // yaw   --> rotate around depth axis
-      x_real_can=req.markers[0].pose.pose.position.x;
-      y_real_can=req.markers[0].pose.pose.position.y;
-      z_real_can=req.markers[0].pose.pose.position.z;
-      //ROS_INFO_STREAM(x_real);
-    } // if
+void cb_can(ar_track_alvar_msgs::AlvarMarkers req) 
+{
+    if (!req.markers.empty()) 
+    {
+        //tf::Quaternion q(req.markers[0].pose.pose.orientation.x, req.markers[0].pose.pose.orientation.y, req.markers[0].pose.pose.orientation.z, req.markers[0].pose.pose.orientation.w);
+        //tf::Matrix3x3 m(q);
+        //double roll, pitch, yaw;
+        //m.getRPY(roll, pitch, yaw);
+        //ROS_INFO("roll, pitch, yaw=%1.2f  %1.2f  %1.2f", roll, pitch, yaw);
+        // roll  --> rotate around vertical axis
+        // pitch --> rotate around horizontal axis
+        // yaw   --> rotate around depth axis
+        x_real_can=req.markers[0].pose.pose.position.x;
+        y_real_can=req.markers[0].pose.pose.position.y;
+        z_real_can=req.markers[0].pose.pose.position.z;
+
+        // ROS_INFO("There is a can in the frame!");
+    } 
 }
 
-void tf_callback(const geometry_msgs::PoseStamped::ConstPtr& msg) {
+void tf_callback(const geometry_msgs::PoseStamped::ConstPtr& msg) 
+{
     //ROS_INFO_STREAM("Received pose: " << msg);
     x_current = msg->pose.position.x;
     z_cuurent = msg->pose.position.z;
@@ -116,7 +118,7 @@ int main(int argc, char **argv) {
     ros::Subscriber sub_can = nhc.subscribe("/detected_objects", 1, cb_can);
     //ros::Subscriber subscribetf = n.subscribe("/myPoint", 1000, tf_callback);
     
-
+    
     pn.param<std::string>("start_position_name", startPositionName, "pre_grasp2");
     pn.param<std::string>("object_name", object_name, "can");
     pn.param<std::string>("table_name", table_name, "table");
@@ -142,7 +144,8 @@ int main(int argc, char **argv) {
     
     
 
-    if(group.plan(startPosPlan)) { //Check if plan is valid
+    if(group.plan(startPosPlan)) 
+    {   //Check if plan is valid
         group.execute(startPosPlan);
         pub_controller_command = n.advertise<trajectory_msgs::JointTrajectory>("/pan_tilt_trajectory_controller/command", 2);
         ros::Publisher chatter16 = n.advertise<std_msgs::Float64>("/torso_effort_controller/command", 0.09);
@@ -179,8 +182,6 @@ int main(int argc, char **argv) {
         //ROS_INFO_STREAM(x_current);
         
         //ros::Rate rate(1);  
-       
-        
         
     }
     else {
@@ -190,10 +191,8 @@ int main(int argc, char **argv) {
     return 0;
 }
 
-moveit_msgs::PickupGoal BuildPickGoal(const std::string &objectName) {
-    
-    
-    
+moveit_msgs::PickupGoal BuildPickGoal(const std::string &objectName) 
+{   
     moveit_msgs::PickupGoal goal;
    
     goal.target_name = objectName;
@@ -245,9 +244,7 @@ moveit_msgs::PickupGoal BuildPickGoal(const std::string &objectName) {
     g.grasp_posture.points[0].positions[0] = 0.01;
     g.grasp_posture.points[0].effort.resize(g.grasp_posture.joint_names.size());
     g.grasp_posture.points[0].effort[0] = 0.4;
-    goal.possible_grasps.push_back(g);
-
-    
+    goal.possible_grasps.push_back(g);   
 
     /*
     moveit::planning_interface::MoveGroupInterface move_group("arm");
@@ -270,16 +267,14 @@ moveit_msgs::PickupGoal BuildPickGoal(const std::string &objectName) {
     move_group.setJointValueTarget(joint_group_positions);
     */
     
-
-    
     return goal;
 }
 
 
 
 
-void look_down() {
-
+void look_down() 
+{
     trajectory_msgs::JointTrajectory traj;
     traj.header.stamp = ros::Time::now();
     traj.joint_names.push_back("head_pan_joint");
@@ -295,7 +290,8 @@ void look_down() {
     pub_controller_command.publish(traj);
 }
 
-void trosso_set() {
+void trosso_set() 
+{
 
     std_msgs::Float64 msg16;
     
@@ -304,7 +300,8 @@ void trosso_set() {
     
 }
 
-bool set_collision_update(bool state){
+bool set_collision_update(bool state)
+{
     std_srvs::SetBool srv;
     srv.request.data=state;
     if (uc_client_ptr->call(srv))
@@ -320,7 +317,8 @@ bool set_collision_update(bool state){
 
 }
 
-bool pickAndPlaceCallBack(std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res) {
+bool pickAndPlaceCallBack(std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res) 
+{
     ros::NodeHandle pn("~");
     ros::NodeHandle n;
     std::string object_name;
@@ -422,9 +420,6 @@ bool pickAndPlaceCallBack(std_srvs::Trigger::Request &req, std_srvs::Trigger::Re
     
     */
 
-    
-
-
    moveit_msgs::PickupGoal pickGoal = BuildPickGoal(object_name);
       
    
@@ -443,12 +438,29 @@ bool pickAndPlaceCallBack(std_srvs::Trigger::Request &req, std_srvs::Trigger::Re
 
                 actionlib::SimpleClientGoalState pickStatus = pickClient.sendGoalAndWait(pickGoal);  
                 }
+    }
+    else
+    {
+        std::cout << "Failed to pick the object!" << std::endl;
+        ros::Duration(2.0).sleep();
+
+        std::cout << "Will try to find out the reason!" << std::endl;
+
+        ros::Subscriber sub_can = n.subscribe("/detected_objects", 1, cb_can);
+        
+        // don't remove the below if-else
+        if(x_real_can != 0.0 && y_real_can != 0.0 && z_real_can != 0.0)
+        {
+            std::cout << "Failed due to an external factor!" << std::endl;
+            ros::Duration(2.0).sleep();
         }
+        else
+        {
+            std::cout << "The object is not in the frame!" << std::endl;
+            ros::Duration(2.0).sleep();
+        }        
+    }
 
-
-
-    
-    
     
     /*move to position for object recognation */
     /*
@@ -506,16 +518,6 @@ bool pickAndPlaceCallBack(std_srvs::Trigger::Request &req, std_srvs::Trigger::Re
     ros::Duration(1).sleep();
     }
     ros::Duration(2).sleep();
-
-    
-    
-    
-   
-   
-   
-   
-        
-
 
 
     /*PickClient pickClient("pickup", true);

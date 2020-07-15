@@ -79,6 +79,7 @@ add_service_files(
    pick_unknown.srv
    place_unknown.srv
    robot_navigation.srv
+   sense_object.srv
 )
 
 ## Generate actions in the 'action' folder
