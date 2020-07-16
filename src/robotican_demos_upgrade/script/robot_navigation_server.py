@@ -64,6 +64,12 @@ def robot_navigation_cb(req):
         elif(req.nav_name == "outside_lab211"):            
             p = subprocess.Popen(["roslaunch /home/lab16/catkin_ws_elevator/src/robotican_demos_upgrade/launch/robot_navigation_outside_lab211.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True)
         
+        elif(req.nav_name == "open_area"):            
+            p = subprocess.Popen(["roslaunch /home/lab16/catkin_ws_elevator/src/robotican_demos_upgrade/launch/robot_navigation_open_area.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True)
+        
+        elif(req.nav_name == "corner_area"):            
+            p = subprocess.Popen(["roslaunch /home/lab16/catkin_ws_elevator/src/robotican_demos_upgrade/launch/robot_navigation_corner_area.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True)
+        
         ## By default it will be near the elevator
         else:           
             p = subprocess.Popen(["roslaunch /home/lab16/catkin_ws_elevator/src/robotican_demos_upgrade/launch/robot_navigation_elevator.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True)

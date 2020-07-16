@@ -31,6 +31,40 @@ def planning_cobra_center():
     proc.terminate()
     return
 
+def _callback_navigate_corner_area(req):
+
+    # define a client to send goal requests to the move_base server through a SimpleActionClient
+    ac = actionlib.SimpleActionClient("move_base", MoveBaseAction)
+    # wait for the action server to come up
+    while(not ac.wait_for_server(rospy.Duration.from_sec(5.0))):
+        rospy.logwarn("Waiting for the move_base action server to come up")
+    '''while(not ac_gaz.wait_for_server(rospy.Duration.from_sec(5.0))):
+        rospy.loginfo("Waiting for the move_base_simple action server to come up")'''
+    goal = MoveBaseGoal()
+    #set up the frame parameters
+    goal.target_pose.header.frame_id = "/map"
+    goal.target_pose.header.stamp = rospy.Time.now()
+    # moving towards the goal*/
+    goal.target_pose.pose.position =  Point(1.350, 4.495, 0)
+    orientation = tf.transformations.quaternion_from_euler(0, 0, -1.552)
+    goal.target_pose.pose.orientation.x = orientation[0]
+    goal.target_pose.pose.orientation.y = orientation[1]
+    goal.target_pose.pose.orientation.z = orientation[2]
+    goal.target_pose.pose.orientation.w = orientation[3]
+
+    rospy.loginfo("Sending goal location ...")
+    ac.send_goal(goal)	
+    ac.wait_for_result(rospy.Duration(60))
+    
+    if(ac.get_state() ==  GoalStatus.SUCCEEDED):
+        print("You have reached the open area")
+        ser_messageResponse(True)
+        time.sleep(1)
+    else:
+        print("The robot failed to reach the open area")
+        ser_messageResponse(False)
+        time.sleep(1)
+
 def _callback_navigate_open_area(req):
 
     # define a client to send goal requests to the move_base server through a SimpleActionClient
@@ -308,5 +342,10 @@ rospy.loginfo("navigation service is waiting for request...")
 
 rospy.Service("/open_area", ser_message, _callback_navigate_open_area)
 rospy.loginfo("navigation service is waiting for request...")
+
+rospy.Service("/corner_area", ser_message, _callback_navigate_corner_area)
+rospy.loginfo("navigation service is waiting for request...")
+
+
 
 rospy.spin()
