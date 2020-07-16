@@ -37,17 +37,18 @@ def sense_object_callback(coordinates):
 
 
 if __name__ == '__main__':
+    global position_x, position_y, position_z
+
     rospy.init_node('detect_object', anonymous=True)
-    #print('\nSet-up is done!!\n')
+    print('\nSet-up is done!!\n')
     time.sleep(1)
     inTime = datetime.datetime.now()
-    rospy.Subscriber("/detected_objects", AlvarMarkers, sense_object_callback)
-    rospy.wait_for_message('/detected_objects', AlvarMarkers)    
-    
-    rate = rospy.Rate(10) # 10hz
+    print("in while before")   
 
+    rospy.Subscriber("/detected_objects", AlvarMarkers, sense_object_callback)
+    
     pub = rospy.Publisher('/observed_object', String, queue_size=10)
-    global position_x, position_y, position_z
+    
     stri = String()
     print("in while")
     while not rospy.is_shutdown():
@@ -57,12 +58,14 @@ if __name__ == '__main__':
             stri = "failed to observe"
             rospy.loginfo(stri)
             pub.publish(stri)
-            rate.sleep()            
+            #rate.sleep()            
 
         elif(position_x != 0.0 or position_y != 0.0 or position_z != 0.0):
             stri = "coordinates received"
             rospy.loginfo(stri)
             pub.publish(stri)
-            rate.sleep()            
+            #rate.sleep()   
+                     
+    rospy.wait_for_message('/detected_objects', AlvarMarkers)   
 
     rospy.spin()

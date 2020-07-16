@@ -20,17 +20,18 @@ from subprocess import Popen, PIPE, call
 
 global inTime, outTime, f_already_launched, globalMessage
 
+globalMessage = "none"
+
 def callback(data):
     #print ("in callback")
     global globalMessage
     globalMessage = data.data
 
 def sense_object_cb(req):
-    #print("in call back")
+    print("in call back")
     try: 
-        global globalMessage, inTime, outTime       
-
-        message = ""
+        global globalMessage, inTime, outTime    
+        
         log = ""
         
         p = subprocess.Popen(["roslaunch robotican_demos_upgrade sense_object_launch.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True)
@@ -38,13 +39,16 @@ def sense_object_cb(req):
         print("calling another callback")
         rospy.Subscriber("/observed_object", String, callback) 
 
-        time.sleep(10)
+        time.sleep(5)
         p.terminate()
 
-        if("failed" in globalMessage):
+        print("globalMessage ", globalMessage)
+        if("failed" in globalMessage or "none" in globalMessage):
             message = "false"
+            globalMessage = "none"
         if("received" in globalMessage):
             message = "true"
+            globalMessage = "none"
         print("returning")
         return sense_objectResponse(message)
     except:

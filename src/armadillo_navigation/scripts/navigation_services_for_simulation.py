@@ -9,7 +9,27 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from geometry_msgs.msg import Point
 from armadillo_navigation.srv import ser_message, ser_messageResponse
 
+import os, time, signal, threading
+import subprocess
+from subprocess import Popen, PIPE, call
+
 rospy.init_node('navigation_services')
+
+def planning_cobra_center():
+    #End#################################################################################################
+    print('Planning to cobra-center!\n')
+    time.sleep(1)
+    proc = subprocess.Popen(["roslaunch robotican_demos_upgrade cobra_center.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True)  
+    while True:
+        lin = proc.stdout.readline()
+        if "success" in lin and "True" in lin:            
+            break
+        elif "success" in lin and "False" in lin:     
+            break
+        else:
+            continue    
+    proc.terminate()
+    return
 
 def _callback_navigate_open_area(req):
 
@@ -267,6 +287,9 @@ def _callback_navigate_corridor(req):
         print("The robot failed to reach the corridor")
         ser_messageResponse(False)
         time.sleep(1)
+
+#it must be in cobra-center position before starting navigation
+planning_cobra_center()
 
 rospy.Service("/elevator_go", ser_message, _callback_navigate_elevator)
 rospy.loginfo("navigation service is waiting for request...")
