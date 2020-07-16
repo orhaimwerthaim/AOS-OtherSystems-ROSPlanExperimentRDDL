@@ -11,7 +11,7 @@ def sense_object_client():
     try:
         sense_object_req = rospy.ServiceProxy('sense_object', sense_object) 
         resp1 = sense_object_req("armadillo", "can", "discrete_location")     
-        print("Responding to pick unknown!")   
+        print("Responding to sense unknown!")   
         return resp1.response
     except rospy.ServiceException as e:
         print("Service call failed: %s"%e)

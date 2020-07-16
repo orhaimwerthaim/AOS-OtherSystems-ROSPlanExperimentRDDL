@@ -7586,6 +7586,25 @@ gazebo_model_path="${gazebo_worlds}/Building_37/models"
        <pose>-15.15 16.22 2.55 0 0 -1.5655 </pose>
       
     </include>
+
+    <!-- A table 3 -->
+    <include>
+      <uri>model://kitchen_table</uri>
+      <name>table3</name>
+      <!--<pose>1.35 -0.8 -0.34 0 0 0</pose>-->
+      <pose>-15.75 5.94 2.71 0 0 1.56 </pose>
+      
+    </include>
+
+   <!-- A table 4 -->
+    <include>
+      <uri>model://kitchen_table</uri>
+      <name>table4</name>
+      <!--<pose>1.35 -0.8 -0.34 0 0 0</pose>-->
+      <pose>-10.7 22.64 2.71 0 0 0 </pose>
+      
+    </include>
+
 <!--another slim can-->
 
 <!-- <include>
@@ -7613,10 +7632,7 @@ gazebo_model_path="${gazebo_worlds}/Building_37/models"
       <name>can1</name>
       <pose>-16.883 23.097 3.355002 0 0 0</pose>
       <static>False</static>
-    </include>
-  
-
-
+    </include>    
 
      <include>
       <uri>model://human_male_4</uri>
