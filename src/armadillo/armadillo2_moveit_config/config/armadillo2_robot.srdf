@@ -93,8 +93,12 @@
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
     <end_effector name="eef" parent_link="gripper_link" group="gripper" parent_group="arm" />
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
-    <virtual_joint name="virtual_joint" type="planar" parent_frame="map" child_link="base_footprint" />
-    <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+
+   <!--shashank: needed to disable the below line to allow moveit not to use the current map -->
+   <!-- <virtual_joint name="virtual_joint" type="planar" parent_frame="map" child_link="base_footprint" />-->
+
+    <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. 
+		This tag disables collision checking between a specified pair of links. -->
    <!-- <disable_collisions link1="base_link" link2="caster_back_left_link" reason="Adjacent" />
     <disable_collisions link1="base_link" link2="caster_back_right_link" reason="Adjacent" />
     <disable_collisions link1="base_link" link2="caster_front_left_link" reason="Adjacent" />

@@ -316,8 +316,8 @@ gazebo_model_path="${gazebo_worlds}/Building_37/models"
       <plugin name='elevator_plugin' filename='libElevatorPlugin.so'>
         <lift_joint>elevator::lift</lift_joint>
         <door_joint>elevator::door</door_joint>
-        <floor_height>2.675</floor_height>
-        <door_wait_time>8</door_wait_time>
+        <floor_height>2.678</floor_height>
+        <door_wait_time>20</door_wait_time>
         <topic>~/elevator</topic>
       </plugin>
     </model>

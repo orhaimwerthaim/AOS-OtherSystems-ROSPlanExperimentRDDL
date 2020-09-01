@@ -6,7 +6,7 @@ roslaunch armadillo2 armadillo2.launch moveit:=true gazebo:=true kinect:=true ki
 
 <launch>
     
-    <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui"> </node> 
+    <!-- <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui"> </node> -->
 
     <include file="$(find object_detection)/launch/find_elevator_button.launch"> </include>
 

@@ -292,7 +292,7 @@
           <limit>
             <lower>0</lower>
             <upper>10</upper>
-            <effort>10000</effort>
+            <effort>100000</effort>
           </limit>
           <dynamics>
             <damping>8000</damping>
@@ -314,7 +314,7 @@
       <plugin name='elevator_plugin' filename='libElevatorPlugin.so'>
         <lift_joint>elevator::lift</lift_joint>
         <door_joint>elevator::door</door_joint>
-        <floor_height>2.675</floor_height>
+        <floor_height>2.678</floor_height>
         <door_wait_time>20</door_wait_time>
         <topic>~/elevator</topic>
       </plugin>

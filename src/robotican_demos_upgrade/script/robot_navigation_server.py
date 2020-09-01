@@ -6,7 +6,7 @@ import sys
 from sys import exit
 
 from robotican_demos_upgrade.srv import *
-from robotican_demos_upgrade.srv import robot_navigationResponse
+from armadillo_navigation.srv import robot_navigationResponse
 import rospy
 import time
 from datetime import datetime

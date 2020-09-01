@@ -342,7 +342,7 @@ bool switch_pcl_topic(armadillo2_msgs::SwitchCamTopic::Request &req, armadillo2_
 
 int main(int argc, char **argv) 
 {
-    ros::init(argc, argv, "find_objects_node");
+    ros::init(argc, argv, "find_objects_node_elevator_button");
     ros::NodeHandle n;
     ros::NodeHandle pn("~");
 	
@@ -371,7 +371,7 @@ int main(int argc, char **argv)
 
     ROS_INFO_STREAM(depth_topic);
 
-    object_pub = n.advertise<ar_track_alvar_msgs::AlvarMarkers>("detected_objects", 2, true);
+    object_pub = n.advertise<ar_track_alvar_msgs::AlvarMarkers>("detected_objects_elevator_button", 2, true);
     pose_pub = pn.advertise<geometry_msgs::PoseStamped>("object_pose",10);
 
     // convert depth cam tf to base foot print tf (moveit work with base footprint tf)
