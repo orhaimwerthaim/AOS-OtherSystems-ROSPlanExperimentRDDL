@@ -17,16 +17,10 @@ from moveit_commander.conversions import pose_to_list
 
 from std_msgs.msg import String
 from control_msgs.msg import GripperCommandActionGoal
-from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
 import os, time, signal, threading
 import subprocess
 from subprocess import Popen, PIPE, call
-from std_msgs.msg import Float64
-from datetime import datetime
-
-global pub
-pub = rospy.Publisher('/torso_effort_controller/command', Float64, queue_size=10)
 
 ##to perform the finish move in the end
 global success_x, success_y, success_z, flag
@@ -43,6 +37,7 @@ position_z = 0.0
 orientation_w =  1.0
 
 def robust_move_group():
+    
     group_name = "arm"
     move_group = moveit_commander.MoveGroupCommander(group_name)
 
@@ -52,9 +47,9 @@ def robust_move_group():
     #wpose.position.y += scale * 0.0  # and sideways (y)
     #waypoints.append(copy.deepcopy(wpose))
 
-    print("\n\n 1. error (z):", abs((float)(position_z - wpose.position.z)))    
+    print('\n\n 1. error (z): ', abs((float)(position_z - wpose.position.z)))    
     #wpose.position.x += scale * 0.05  # Second move forward/backwards in (x)
-    wpose.position.z += abs((float)(position_z - wpose.position.z)) - 0.001
+    wpose.position.z += abs((float)(position_z - wpose.position.z))
     waypoints.append(copy.deepcopy(wpose))
 
     (plan, fraction) = move_group.compute_cartesian_path(
@@ -66,16 +61,15 @@ def robust_move_group():
 
     #plan = robust_move_group()
     move_group.execute(plan, wait=True)
-    time.sleep(2)
 
+    time.sleep(2)
     group_name = "arm"
     move_group = moveit_commander.MoveGroupCommander(group_name)
     waypoints = []
     wpose = move_group.get_current_pose().pose
-    print("\n\n 1. error (y):", abs((float)(position_y - wpose.position.y)))    
+    print('\n\n 1. error (y): ', abs((float)(position_y - wpose.position.y)))    
     #wpose.position.x += scale * 0.05  # Second move forward/backwards in (x)
-    #wpose.position.y += abs((float)(position_y - wpose.position.y)) - 1
-    wpose.position.x += abs((float)(position_y - wpose.position.y)) - 0.001
+    wpose.position.y += abs((float)(position_y - wpose.position.y)) - 1
     waypoints.append(copy.deepcopy(wpose))
 
     (plan, fraction) = move_group.compute_cartesian_path(
@@ -86,12 +80,13 @@ def robust_move_group():
     # Note: We are just planning, not asking move_group to actually move the robot yet:
 
     #plan = robust_move_group()
-    move_group.execute(plan, wait=True)     
-        
+    move_group.execute(plan, wait=True)  
+    
+    print( "abs((float)(position_y - wpose.position.y))", abs((float)(position_y - wpose.position.y)))
     ##remember that the below print statements are required, don't remove those two print statements
     ##also it can open even when last plan was not true, be careful, need to resolve after the deadline
-    if (abs((float)(position_x - wpose.position.x)) < 0.2):
-        #print('\n\nThe gripper is ', position_y, wpose.position.y, (float)(position_y - wpose.position.y), 'far to the button')
+    if (abs((float)(position_y - wpose.position.y)) < 1.0):
+        print('\n\nThe gripper is ', position_y, wpose.position.y, (float)(position_y - wpose.position.y), 'far to the button')
         planning_cobra_center()
         time.sleep(1)        
         os.system('roslaunch pygazebo_ros_gazebo_elevator elevator_gate_opener.launch') #default floor_num:="1"        
@@ -99,19 +94,17 @@ def robust_move_group():
 
     else:
         planning_cobra_center()
+        time.sleep(1)
         print("\nCould not push the button, (success : False)")
 
     #it does not come here
-        ##set the torso
-  
-    #print("after if else")
-    time.sleep(2)
+    print("after if else")
 
-def planning_cobra_center():    
-    print('Planning to the cobra-center!\n')
+def planning_cobra_center():
+    #End#################################################################################################
+    print('Planning back to cobra-center!\n')
     time.sleep(1)
-    proc = subprocess.Popen(["roslaunch robotican_demos_upgrade cobra_center.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True) 
-    
+    proc = subprocess.Popen(["roslaunch robotican_demos_upgrade cobra_center.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True)  
     while True:
         lin = proc.stdout.readline()
         if "success" in lin and "True" in lin:            
@@ -119,45 +112,21 @@ def planning_cobra_center():
         elif "success" in lin and "False" in lin:     
             break
         else:
-            continue  
-    
-    time.sleep(10)
+            continue    
     proc.terminate()
-   
+    return
+
 def push_button_go():
-    #global pub
+
     #Beginning#################################################################################################    
     planning_cobra_center()
-    ##robust_move_group()    
-    count_failure = 0
-    ##set the torso
-    rate = rospy.Rate(10) # 10hz
-    now = datetime.now()  
-    
-    '''
-    ### this code is when there we work with map and need to use the manipulator 
-    while not rospy.is_shutdown():
-        pub = rospy.Publisher('/torso_effort_controller/command', Float64, queue_size=10)
-        msg = Float64()
-        msg.data = 0.22
-        pub.publish(msg)
-        print("pub pub pub !! !! !! !! !! !!")   
-
-        later = datetime.now()
-        diff = later - now
-        diff_in_seconds = diff.days*24*60*60 + diff.seconds
-        if(diff_in_seconds >= 2):
-            break 
-    
+    robust_move_group()   
     return
-    '''
 
-    ## The code beow is an ideal way to push button, since it moves hand slowly and in pieces. 
-    ## With map on, there might be some issues. So directlty calling the waypoint approach may be problematic on some systems
-    ## This needs to be fixed for the real robot.
+    #The below code is ideal, since it moves hand slowly and in pieces. With map on, there is some issue. So directlty calling the waypoint approach
+    #This needs to be fixed for the real robot.
     global success_x, success_y, success_z, flag
- 
-    # START #################################################################################################    
+    #START#################################################################################################    
     moveit_commander.roscpp_initialize(sys.argv)
     robot = moveit_commander.RobotCommander()
     scene = moveit_commander.PlanningSceneInterface()
@@ -165,14 +134,15 @@ def push_button_go():
     group_name = "arm"
     group = moveit_commander.MoveGroupCommander(group_name)
     
-    print('\n\nPlan the first move!')
+    print('\n\nFirst move!')
     pose_goal = geometry_msgs.msg.Pose()
     pose_goal.orientation.w = orientation_w
-    pose_goal.position.x = position_x - 0.3
-    pose_goal.position.y = position_y
+    pose_goal.position.x = position_x 
+    pose_goal.position.y = position_y - 0.2
     pose_goal.position.z = position_z
 
     print('\n\nCoordinates : ', pose_goal.position.x, pose_goal.position.y, pose_goal.position.z)
+
     group.set_pose_target(pose_goal)
     group.set_num_planning_attempts = 10
     group.allow_replanning = True
@@ -195,15 +165,14 @@ def push_button_go():
                 flag = True
     else:
         print('It failed ...')
-        count_failure = count_failure + 1
     #END#################################################################################################
 
-    #START#################################################################################################    
+    #START#################################################################################################
     print('\n\nPlan another move ...')
     pose_goal = geometry_msgs.msg.Pose()
     pose_goal.orientation.w = orientation_w
-    pose_goal.position.x = position_x - 0.2
-    pose_goal.position.y = position_y 
+    pose_goal.position.x = position_x 
+    pose_goal.position.y = position_y - 0.1
     pose_goal.position.z = position_z
     
     print('Coordinates : ', pose_goal.position.x, pose_goal.position.y, pose_goal.position.z)
@@ -224,21 +193,20 @@ def push_button_go():
             print('\nSuccess again!')
             if (not flag):
                 #global success_x, success_y, success_z#, flag
-                success_x = pose_goal.position.x 
-                success_y = pose_goal.position.y 
+                success_x = pose_goal.position.x
+                success_y = pose_goal.position.y - 0.05
                 success_z = pose_goal.position.z
                 flag = True
     else:
         print('It failed ...')
-        count_failure = count_failure + 1
     #END#################################################################################################
 
-    #START#################################################################################################   
+    #START#################################################################################################
     print('\n\nPlan another move ...')
     pose_goal = geometry_msgs.msg.Pose()
     pose_goal.orientation.w = orientation_w
-    pose_goal.position.x = position_x - 0.1
-    pose_goal.position.y = position_y 
+    pose_goal.position.x = position_x 
+    pose_goal.position.y = position_y - 0.01
     pose_goal.position.z = position_z
     
     print('Coordinates : ', pose_goal.position.x, pose_goal.position.y, pose_goal.position.z)
@@ -265,24 +233,14 @@ def push_button_go():
                 flag = True
     else:
         print('It failed ...')
-        count_failure = count_failure + 1
     #END#################################################################################################
+      
+    robust_move_group()
 
-
-    #print("how many times failed", count_failure)
-    if(count_failure < 3):  
-        robust_move_group()
-    else:
-        print("\nCould not push the button, (success : False)")
-
-    #End#################################################################################################       
-    
-    ###planning_cobra_center()
-    '''
-    time.sleep(1)
+    #End#################################################################################################
     print('\nPlanning back to cobra-center!\n')
-    proc = subprocess.Popen(["roslaunch robotican_demos_upgrade cobra_center.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True)    
-        
+    time.sleep(1)
+    proc = subprocess.Popen(["roslaunch robotican_demos_upgrade cobra_center.launch"], stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True)  
     while True:
         lin = proc.stdout.readline()
         if "success" in lin and "True" in lin:            
@@ -292,105 +250,48 @@ def push_button_go():
         else:
             continue    
     proc.terminate()
-    #exit(0)
-    '''
+    exit(0)
 
 def push_button_callback(coordinates):      
     global position_x, position_y, position_z
     position_x = coordinates.markers[1].pose.pose.position.x
     position_y = coordinates.markers[1].pose.pose.position.y
     position_z = coordinates.markers[1].pose.pose.position.z
-    #print("poses:", position_x, position_y, position_z)
+    print("poses:", position_x, position_y, position_z)
 
-def set_all_the_hardware(status="pre"):
+def set_all_the_hardware():
     import rospy
     from std_msgs.msg import Float64 
     from datetime import datetime
-    
+
     rate = rospy.Rate(10) # 10hz
 
     ##set the torso
-    now = datetime.now()   
-    global pub
+    now = datetime.now()
     while not rospy.is_shutdown():
-        #pub = rospy.Publisher('/torso_effort_controller/command', Float64, queue_size=10)
+        pub = rospy.Publisher('/torso_effort_controller/command', Float64, queue_size=10)
         msg = Float64()
-        #print("status", status)
-        time.sleep(3)
-        if(status == "pre"):
-            msg.data = 0.37
-        else:
-            msg.data = 0.12
+        msg.data = 0.38
         pub.publish(msg)
-        rate.sleep()
-
         later = datetime.now()
         diff = later - now
         diff_in_seconds = diff.days*24*60*60 + diff.seconds
         if(diff_in_seconds >= 2):
             break
 
-    print("\nTorso is set!")    
-    
-    if(status == "pre"):
-        #close the Gripper        
-        print("\nGripper is closed!")
-        #os.system('rosrun robotican_demos_upgrade gripper_close.py')
-        pub_gripper = rospy.Publisher('/gripper_controller/gripper_cmd/goal', GripperCommandActionGoal, queue_size=10)
-        time.sleep(1)
-        msg_gripper = GripperCommandActionGoal()
-        msg_gripper.goal.command.position=0.02
-        #msg_gripper.header.stamp=rospy.Time.now()
-        #msg_gripper.header.frame_id=""
-        for ii in range(0,3):
-            #msg_gripper.goal.command.position=0.02
-            #time.sleep(1)
-            pub_gripper.publish(msg_gripper)
-            time.sleep(1)
-        time.sleep(1)                  
-        
-        print("\nKinect is looking down!")
-        pub_joint_trajectory = rospy.Publisher('/pan_tilt_trajectory_controller/command', JointTrajectory, queue_size=10)
-        time.sleep(1)
-        msg_joint_traj = JointTrajectory()
-        msg_joint_traj.header.stamp = rospy.Time.now()
-        msg_joint_traj.joint_names.append("head_pan_joint")
-        msg_joint_traj.joint_names.append("head_tilt_joint")
-
-        p = JointTrajectoryPoint()
-        p.positions.append(0.02)
-        p.positions.append(0.55)
-        msg_joint_traj.points.append(p)
-        
-        msg_joint_traj.points[0].time_from_start = rospy.Duration(1.0)
-        #msg_joint_traj.points[0].positions = [0.0, 0.55]
-
-        #msg_gripper.header.stamp=rospy.Time.now()
-        #msg_gripper.header.frame_id=""
-        for ii in range(0,3):
-            #msg_gripper.goal.command.position=0.02
-            #time.sleep(1)
-            pub_joint_trajectory.publish(msg_joint_traj)
-            time.sleep(1)
-        time.sleep(1)   
-        
-    return "true"
-
-
+    print("\nTorso is set!")
+    print("\nGripper is closed!")
+    time.sleep(1)
 
 if __name__ == '__main__':
     
     rospy.init_node('push_button', anonymous=True)
     print("\nSet up the hardware configurations!")
-    set_all_the_hardware(status="pre")
+    set_all_the_hardware()
     time.sleep(1)
-    
     print('\nSet-up is done!!\n')
 
-    rospy.Subscriber("/detected_objects_elevator_button", AlvarMarkers, push_button_callback)
-    rospy.wait_for_message('/detected_objects_elevator_button', AlvarMarkers)
-    
+    rospy.Subscriber("/detected_objects", AlvarMarkers, push_button_callback)
+    rospy.wait_for_message('/detected_objects', AlvarMarkers)
     push_button_go()
-    set_all_the_hardware(status="post")
     rospy.spin()
-    
