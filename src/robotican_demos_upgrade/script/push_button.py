@@ -52,7 +52,7 @@ def robust_move_group():
     #wpose.position.y += scale * 0.0  # and sideways (y)
     #waypoints.append(copy.deepcopy(wpose))
 
-    print("\n\n 1. error (z):", abs((float)(position_z - wpose.position.z)))    
+    print("\n3. error (z):", abs((float)(position_z - wpose.position.z)))    
     #wpose.position.x += scale * 0.05  # Second move forward/backwards in (x)
     wpose.position.z += abs((float)(position_z - wpose.position.z)) - 0.001
     waypoints.append(copy.deepcopy(wpose))
@@ -65,17 +65,17 @@ def robust_move_group():
     # Note: We are just planning, not asking move_group to actually move the robot yet:
 
     #plan = robust_move_group()
-    move_group.execute(plan, wait=True)
-    time.sleep(2)
+    move_group.execute(plan, wait=True) 
+    time.sleep(1)
 
     group_name = "arm"
     move_group = moveit_commander.MoveGroupCommander(group_name)
     waypoints = []
     wpose = move_group.get_current_pose().pose
-    print("\n\n 1. error (y):", abs((float)(position_y - wpose.position.y)))    
+    print("\n2. error (y):", abs((float)(position_y - wpose.position.y)))    
     #wpose.position.x += scale * 0.05  # Second move forward/backwards in (x)
     #wpose.position.y += abs((float)(position_y - wpose.position.y)) - 1
-    wpose.position.x += abs((float)(position_y - wpose.position.y)) - 0.001
+    wpose.position.y += abs((float)(position_y - wpose.position.y)) - 0.001
     waypoints.append(copy.deepcopy(wpose))
 
     (plan, fraction) = move_group.compute_cartesian_path(
@@ -87,10 +87,34 @@ def robust_move_group():
 
     #plan = robust_move_group()
     move_group.execute(plan, wait=True)     
-        
+    time.sleep(1)
+
+    '''
+    group_name = "arm"
+    move_group = moveit_commander.MoveGroupCommander(group_name)
+    waypoints = []
+    wpose = move_group.get_current_pose().pose
+    print("\n3. error (x):", abs((float)(position_x - wpose.position.x)))    
+    #wpose.position.x += scale * 0.05  # Second move forward/backwards in (x)
+    #wpose.position.y += abs((float)(position_y - wpose.position.y)) - 1
+    wpose.position.x += abs((float)(position_x - wpose.position.x)) - 0.001
+    waypoints.append(copy.deepcopy(wpose))
+
+    (plan, fraction) = move_group.compute_cartesian_path(
+                                    waypoints,   # waypoints to follow
+                                    0.01,        # eef_step
+                                    0.0)         # jump_threshold
+    #print("y = ", wpose.position.y)
+    # Note: We are just planning, not asking move_group to actually move the robot yet:
+
+    #plan = robust_move_group()
+    move_group.execute(plan, wait=True)  
+    time.sleep(2)
+    '''
+
     ##remember that the below print statements are required, don't remove those two print statements
     ##also it can open even when last plan was not true, be careful, need to resolve after the deadline
-    if (abs((float)(position_x - wpose.position.x)) < 0.2):
+    if (abs((float)(position_x - wpose.position.x)) < 0.1):
         #print('\n\nThe gripper is ', position_y, wpose.position.y, (float)(position_y - wpose.position.y), 'far to the button')
         planning_cobra_center()
         time.sleep(1)        
