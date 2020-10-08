@@ -171,7 +171,7 @@ void obj_msgCallback(const boost::shared_ptr<const geometry_msgs::PoseStamped>& 
         m.header.frame_id="base_footprint";
       	m.pose = base_object_pose;
 
-       	m.pose.pose.position.z += 0.02;
+       	m.pose.pose.position.z += 0.001;
 
         /**
         if(global_var_for_push_button == 1)
@@ -187,7 +187,7 @@ void obj_msgCallback(const boost::shared_ptr<const geometry_msgs::PoseStamped>& 
 
         msg.markers.push_back(m);
 		
-        m.pose.pose.position.z -= 0.08;
+        m.pose.pose.position.z -= 0.001;
         m.id=2;
         msg.markers.push_back(m);
 
@@ -342,7 +342,7 @@ bool switch_pcl_topic(armadillo2_msgs::SwitchCamTopic::Request &req, armadillo2_
 
 int main(int argc, char **argv) 
 {
-    ros::init(argc, argv, "find_objects_node_elevator_button");
+    ros::init(argc, argv, "find_objects_ele_button");
     ros::NodeHandle n;
     ros::NodeHandle pn("~");
 	
@@ -372,14 +372,14 @@ int main(int argc, char **argv)
     ROS_INFO_STREAM(depth_topic);
 
     object_pub = n.advertise<ar_track_alvar_msgs::AlvarMarkers>("detected_objects_elevator_button", 2, true);
-    pose_pub = pn.advertise<geometry_msgs::PoseStamped>("object_pose",10);
+    pose_pub = pn.advertise<geometry_msgs::PoseStamped>("object_pose_button",10);
 
     // convert depth cam tf to base foot print tf (moveit work with base footprint tf)
     tf::TransformListener listener;
     listener_ptr = &listener;
 
     message_filters::Subscriber<geometry_msgs::PoseStamped> point_sub_;
-    point_sub_.subscribe(pn, "object_pose", 10);
+    point_sub_.subscribe(pn, "object_pose_button", 10);
 
     tf::MessageFilter<geometry_msgs::PoseStamped> tf_filter(point_sub_, listener, "base_footprint", 10);
     tf_filter.registerCallback( boost::bind( obj_msgCallback, _1 ) );
@@ -388,7 +388,7 @@ int main(int argc, char **argv)
     ros::ServiceServer switch_sub = n.advertiseService("switch_pcl_topic", &switch_pcl_topic);
 
     ros::Rate r(10);
-    ROS_INFO("\n\nReady to find objects!\n\n");
+    ROS_INFO("\n\nReady to find the elevator button!\n\n");
     
     while (ros::ok()) 
     {
@@ -403,4 +403,5 @@ int main(int argc, char **argv)
 
     return 0;
 }
+
 

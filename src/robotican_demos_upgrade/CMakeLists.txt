@@ -146,6 +146,10 @@ include_directories(
         ${OpenCV_INCLUDE_DIRS}
 )
 
+add_executable(pid_adjust_button src/pid_adjust_button.cpp)
+add_dependencies(pid_adjust_button robotican_demos_upgrade_generate_messages_cpp)
+target_link_libraries(pid_adjust_button ${catkin_LIBRARIES})
+
 add_executable(input_message_publisher src/input_message_publisher.cpp)
 add_dependencies(input_message_publisher robotican_demos_upgrade_generate_messages_cpp)
 target_link_libraries(input_message_publisher ${catkin_LIBRARIES})
