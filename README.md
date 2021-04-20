@@ -73,6 +73,8 @@ As explained in the [article](https://ojs.aaai.org/index.php/ICAPS/article/view/
 
 ROSPlan also has a Sensing Interface that can update the KB regardless of action execution, updating the KB. This sensing is defined in a configuration file. It allows automatic subscription to ROS topics, periodic calls to ROS services, and defining the transformation from a topic message to a predicate update (possibly by a python script to process the message).
 
-Ideas
+## Issues found in ROSPlan:
+- ROSPlan's main branch does not support all of the planners listed in the documentation (See discussion on [Contingent-FF](https://github.com/KCL-Planning/ROSPlan/issues/254#issuecomment-822048585)).
+- ROSPlan does not have a module that handles replanning, as one would expect from reading the article. It looks like the user's responsibility (I have an open question in ROSPlan's [GitHub](https://github.com/KCL-Planning/ROSPlan/issues/254#issuecomment-822048585) on this issue). 
 
 
