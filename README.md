@@ -43,9 +43,9 @@ echo 'source <project_path>/devel/setup.bash' >> ~/.bashrc
 ## Running the experiment
 Since ROSPlan changes the problem.pddl file during its run, we must make sure that the current problem.pddl file is placed.
 ```sh
-copy ‘.../catkin_ws/src/rosplan_experiment_pddl/pddl/working pddl backup/experiment_problem.pddl’ to ‘.../catkin_ws/src/rosplan_experiment_pddl/pddl’
+cp "<project_path>/src/rosplan_experiment_pddl/pddl/working pddl backup/experiment_problem.pddl" "<project_path>/src/rosplan_experiment_pddl/pddl/experiment_problem.pddl"
 ```
-Replace an existing file if one is there.
+You will need to restore the experiment_problem.pddl file after every run (use the command above).
 
 To run a simulation without gazebo open a new terminal:
 ```sh
@@ -61,20 +61,11 @@ If you want the gazebo simulation to work:
 
 
 
-The ROSPlan experiment is controlled by '../catkin_ws/src/ROSPlan/rosplan_planning_system/src/RunPlanningControl.cpp', which triggers planning and replanning.
+The ROSPlan experiment is controlled by '<project_path>/src/ROSPlan/rosplan_planning_system/src/RunPlanningControl.cpp', which triggers planning and replanning.
 
 
 ## Related repositories:
 - [ROSPlan](https://github.com/KCL-Planning/ROSPlan) repository was copied AS-IS. It will not be updated to prevent breaking the experiment code.
 - The BGU [catkin_ws_elevator](https://github.com/bguplp/catkin_ws_elevator/tree/master/src) contains the gazebo simulation used for the ROS-POMDP experiment.
 
-[catkin_ws_elevator]: <https://github.com/bguplp/catkin_ws_elevator/tree/master/src>
-[ROSPlan's planner interface]: <https://kcl-planning.github.io/ROSPlan//documentation/interfaces/02_planner_interface.html>
-[PlanROB2020]: <https://icaps20subpages.icaps-conference.org/workshops/planrob/>.
-[Install ROS]: <http://wiki.ros.org/ROS/Installation>
-[Install ROSPlan]: <https://github.com/KCL-Planning/ROSPlan>
-[ROS]: <http://wiki.ros.org>
-[ROS-POMDP]: <https://icaps20subpages.icaps-conference.org/wp-content/uploads/2020/10/08-PlanRob_2020_paper_21.pdf>
-[ROSPlan]: <https://ojs.aaai.org/index.php/ICAPS/article/view/13699/13548>
-[ROSPlan tutorials]: <https://kcl-planning.github.io/ROSPlan/documentation/>
 
