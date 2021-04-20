@@ -2,7 +2,7 @@
 
 
 <launch>
-
+<arg name="map"	default="/home/or/catkin_ws/src/armadillo_navigation/map/simulation_map_elevator.yaml" />
     <include file="$(find armadillo2)/launch/armadillo2_for_navigation_upgrade.launch">
             <arg name="lidar" value="true"/>
             <arg name="gazebo" value="true"/>
@@ -19,9 +19,15 @@
             <arg name="amcl" value="true"/>
             <arg name="have_map" value="true"/>
             <arg name="move_base" value="true"/>
-            <arg name="map" value="/home/lab16/catkin_ws_elevator/src/armadillo_navigation/map/simulation_map_elevator.yaml"/>
+            <arg name="map" value="$(arg map)"/>
     </include>  
+	
 
+<!--
+<node name="navigation_sim_server" pkg="robotican_demos_upgrade" type="robot_navigation_server.py" output="screen"> </node> 
+<node name="sense_sim_server" pkg="robotican_demos_upgrade" type="sense_object_server.py" output="screen"> </node> 
+<node name="pick_sim_server" pkg="robotican_demos_upgrade" type="pick_object_server.py" output="screen"> </node> 
+<node name="place_sim_server" pkg="robotican_demos_upgrade" type="place_object_server.py" output="screen"> </node> -->
     <!-- <node name="navigation_services_for_simulation" pkg="armadillo_navigation" type="navigation_services_for_simulation.py" output="screen"> </node> -->
 
     <!--

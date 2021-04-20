@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/ROSPlan" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/ROSPlan/rosplan_dependencies/VAL" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/ROSPlan/rosplan_dependencies/ppddl_parser" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/ROSPlan/rosplan_dependencies/rddl_parser" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/ROSPlan/rosplan_dependencies/rddlsim" vcs="Git" />
+  </component>
+</project>
