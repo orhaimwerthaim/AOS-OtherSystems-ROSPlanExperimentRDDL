@@ -63,9 +63,14 @@ If you want the gazebo simulation to work:
 
 The ROSPlan experiment is controlled by '<project_path>/src/ROSPlan/rosplan_planning_system/src/RunPlanningControl.cpp', which triggers planning and replanning.
 
-
 ## Related repositories:
 - [ROSPlan](https://github.com/KCL-Planning/ROSPlan) repository was copied AS-IS. It will not be updated to prevent breaking the experiment code.
 - The BGU [catkin_ws_elevator](https://github.com/bguplp/catkin_ws_elevator/tree/master/src) contains the gazebo simulation used for the ROS-POMDP experiment.
+
+# ROSPlan eveluation report:
+## ROSPlan Overview
+As explained in the article and tutorials, ROSPlan is a modular system. It stores the PDDL domain and problem files in the Knowledge Base (KB).  A Problem interface node is used to generate a PDDL problem instance from the current state, kept in the KB. The KB is initialized by a problem.pddl file, which is updated during execution with the current KB state.  ROSPlan has a Planner Interface node, which is a wrapper for AI Planners. The planner is called through a service, which returns true if a solution is found. This interface feeds the planner with a domain file and a problem instance, and calls the planner with a command line. If a solution is found, it can be written to a file and/or published on a ROS topic. The Parsing Interface node can parse the solution given by the planner to an executable representation (a simple or ESTEREL plan). This representation can be executed by the Plan Dispatch service, which yields false if the plan fails to allow replanning by the current state in the KB. 
+
+ROSPlan also has a Sensing Interface that can update the KB regardless of action execution, updating the KB. This sensing is defined in a configuration file. It allows automatic subscription to ROS topics, periodic calls to ROS services, and defining the transformation from a topic message to a predicate update (possibly by a python script to process the message).
 
 
