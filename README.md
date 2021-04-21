@@ -114,3 +114,11 @@ Affective replanning requires users to wisely design the PDDL domain and careful
 - ROSPlan is strongly coupled with ROS (their communication, data structures, and process activation), it is not required, and **we should be careful from coupling the AOS with specific target frameworks**.
 - ROSPlan stores the domain and current state in a persistent way decoupled from the planner. It allows replanning, changing the goals, and is more flexible in general. **To allow flexibility, the AOS should save its domain and current belief state outside the planner process.** 
 
+
+#### To better support plug&play:
+- The AOS should include mapping on how to activate the user code module. More specifically, it should support mapping between action symbolic parameters to actual module activation. This mapping can be done similarly to ROSPlans sensing interface configuration. By either using a direct mapping from a set of action arguments to an activation command; or in a more advanced setting, users can define a python script that performs preprocessing to evaluate the module activation parameters.
+- The AOS should map in the same way the translation of module response to valid observations the planner can read.  
+
+#### For increased useability:
+- The AOS should also allow the project to run in a symbolic mode without activating the user code modules. The user will see the plan, actions that are currently dispatched, the progress of the belief state, and observation received. Ideally, The system will have a control panel for this and additional uses (like validation and auto-editing of PLPs). In ROSPlan, it is hard to keep track of the current state, and the user may need to activate different services from the terminal along with using the rqt plugin.  
+
