@@ -95,3 +95,11 @@ Replanning can help if noisy sensing is given that the can is not outside the la
 
 Affective replanning requires users to wisely design the PDDL domain and carefully update the KB when a possibly noisy sensing was received. 
 
+
+## _What ROSPlan taught me (for designing the AOS):_
+- ROSPlan is a modular system that can connect to different planners. **The AOS should also have an architecture that can use other planners, parse their plans to a uniform plan format that it can execute.**
+- [ROSPlan uses](http://kcl-planning.github.io/ROSPlan//tutorials/tutorial_05) ubuntu's DOT application for drawing directed graphs to generate a PDF describing the current plan. ROSPlan has an rqt plugin to see the plan in real-time. It was extremely useful when I needed to fix my PDDL domain. **The AOS should use [ubuntu's applications for drawing graphs](http://manpages.ubuntu.com/manpages/bionic/man1/dot.1.html) to visualize the POMCP tree. Currently, I am debugging the ROS-POMDP solver to see the tree, and we cannot expect users to do so.**
+- ROSPlan has detailed tutorials for some of its capabilities. Everything that was documented was easy to understand and emulate; details that were not documented required significant time investigating ROSPlan's code, searching for examples on the web, and communicating with ROSPlan's team, so I can understand how to work with ROSPlan. **The AOS must have detailed, user-friendly tutorials. Capabilities that are not documented areas if they do not exist.** Additionally, we cannot expect to have a team working on the system and replying to user requests as ROSPlan has.  
+- **ROSPlan is strongly coupled with ROS** (their communication, data structures, and process activation), it is not required, and we should be careful from doing so.
+- ROSPlan stores the domain and current state in a persistent way decoupled from the planner. It allows replanning, changing the goals, and more flexibility in general. **The AOS should also save its current domain and belief state outside the planner process.** 
+
