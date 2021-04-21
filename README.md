@@ -93,8 +93,9 @@ ROSPlan also has a Sensing Interface that can update the KB regardless of action
 - When replanning is needed (since it is not covered in the tutorials) the users must investigate (understanding their code, searching the web, etc.), which can take additional three days.
 - For domains with special behavior like indeterministic effects (or sensing), the user must implement his own action interface class; the time taken depends on the complexity of the action behavior and the user experience with ROSPlan. For beginners working on relatively simple actions, it can take another two days of implementation and integration.
 - The user must implement his own class for controlling the planning and replanning process. This implementation requires additional knowledge in ROSPlan's code and can take around two days (with integration). 
+
 For a very simple first project, ROSPlan integration can take around ten working days, reasonable. 
-   
+ > To understand how the AOS can be closer than ROSPlan to a plug&play solution, see the 'What ROSPlan taught me' section below.  
 
 ## Experiment results:
 As expected, since PDDL does not capture the domain observation model. Consequently, it was not reasoned about during planning; each noisy sensing action caused an undesired sequence of actions, which in some, but not all, cases can be correct if a correct observation is given afterward. 
