@@ -77,14 +77,24 @@ ROSPlan also has a Sensing Interface that can update the KB regardless of action
 ## Issues found in ROSPlan:
 - ROSPlan's main branch does not support all of the planners listed in the documentation (See discussion on [Contingent-FF](https://github.com/KCL-Planning/ROSPlan/issues/254#issuecomment-822048585)).
 - ROSPlan does not have a module that handles replanning, as one would expect from reading the article. It is the user's responsibility (see [GitHub](https://github.com/KCL-Planning/ROSPlan/issues/254#issuecomment-822048585)).
+- ROSPlan's temporal planner (popf) allows concurrent action execution. When concurrent actions are dispatched in ROSPlan, and for some reason, we require replanning, the cancel dispatch service cannot actually cancel the execution, and replanning cannot occur. To allow replanning, I constructed the domain (with a 'can_act' predicate) so that only one action can be executed at any time point. 
 
 
-## ROSPlan-user integration effort::
-Create a PDDL domain and problem file.
-Add an action interface C++ (and header) file for every action,these files can be copied from the ROSPlan tutorial, and they contain a function triggered when ROSPlan dispatches the action. Users should only add a call to their robot action code module. ROSPlan will automatically update the KB by the action effects.   
-For non-deterministic actions, the user must implement his own action interface C++ file. In my implementation, I changed their base interface action class so it will not update the KB automatically. However, I still use their code for subscribing and listening to the dispatch action topic and to trigger the action interface when needed. I had to implement KB updates by the result of my sensing action.  
-The CMakeLists.txt and package.xml files must be updated to build the new files and add the dependency on the user code module packages. 
-The user must implement a module that triggers the different ROSPlan services for planning, plan parsing, and plan dispatching. This module should activate replanning when needed.
+## ROSPlan-user integration effort:
+### Code:
+- Create a PDDL domain and problem file.
+- Add an action interface C++ (and header) file for every action,these files can be copied from the ROSPlan tutorial, and they contain a function triggered when ROSPlan dispatches the action. Users should only add a call to their robot action code module. ROSPlan will automatically update the KB by the action effects.   
+- For non-deterministic actions, the user must implement his own action interface C++ file. In my implementation, I changed their base interface action class so it will not update the KB automatically. However, I still use their code for subscribing and listening to the dispatch action topic and to trigger the action interface when needed. I had to implement KB updates by the result of my sensing action.  
+- The CMakeLists.txt and package.xml files must be updated to build the new files and add the dependency on the user code module packages. 
+- The user must implement a module that triggers the different ROSPlan services for planning, plan parsing, and plan dispatching. This module should activate replanning when needed.
+
+### Time:
+- Using ROSPlan requires reading their (very good) tutorials, which can take around three days.
+- When replanning is needed since it is not covered in the tutorials, the users must investigate (understanding their code, searching the web, etc.), which can take additional three days.
+- For domains with special behavior like indeterministic effects (or sensing), the user must implement his own action interface class; the time taken depends on the complexity of the action behavior and the user experience with ROSPlan. For beginners working on relatively simple actions, it can take another two days of implementation and integration.
+- The user must implement his own class for controlling the planning and replanning process. This implementation requires additional knowledge in ROSPlan's code and can take around two days (with integration). 
+For a very simple first project, ROSPlan integration can take around ten working days, reasonable. 
+   
 
 ## Experiment results:
 As expected, since PDDL does not capture the domain observation model. Consequently, it was not reasoned about during planning; each noisy sensing action caused an undesired sequence of actions, which in some, but not all, cases can be correct if a correct observation is given afterward. 
