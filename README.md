@@ -16,8 +16,9 @@ I wanted to compare it with our ROS-POMDP, so I conducted the same experiment as
 
 I wanted to use ROSPLan with contingent planning (see [ROSPlan's planner interface](https://kcl-planning.github.io/ROSPlan//documentation/interfaces/02_planner_interface.html) regarding Contingent-FF). But contingent planning is not supported on ROSPlan's main branch (see [github discussion](https://github.com/KCL-Planning/ROSPlan/issues/254#issuecomment-822048585)), so I used the supported temporal planner with replanning. I expected ROSPlan to have a module that controls the triggering of replanning. Yet, they [replied](https://github.com/KCL-Planning/ROSPlan/issues/254#issuecomment-822048585) that it was an existing capability described in their [first article](https://ojs.aaai.org/index.php/ICAPS/article/view/13699/13548), which was removed from the current version, so I implemented a module that triggers planning and replanning when needed. 
 
+# Running the experiment
 ## Installation
-Clone using:
+Clone the code using:
 ```sh
 $ git clone --recurse-submodules https://github.com/orhaimwerthaim/AOS-OtherSystems-ROSPlanExperimentPDDL.git
 ```
@@ -28,35 +29,35 @@ Install:
 - [ROS](http://wiki.ros.org/ROS/Installation)
 - [Install ROSPlan dependencies](https://github.com/KCL-Planning/ROSPlan)
 
-Build:
+Build it using:
 ```sh
 $ cd <project_path>
 $ catkin_make
 ```
-<project_path> is the path to your local copy of the repository.
+<project_path> stand for the path to your local copy of the repository.
 
 Source:
 ```sh
 echo 'source <project_path>/devel/setup.bash' >> ~/.bashrc     
 ```
 
-## Running the experiment
-Since ROSPlan changes the problem.pddl file during its run, we must make sure that the current problem.pddl file is placed.
+## Running
+Since ROSPlan changes the problem.pddl file during its run, we must make sure that the original problem.pddl file is placed.
 ```sh
 cp "<project_path>/src/rosplan_experiment_pddl/pddl/working pddl backup/experiment_problem.pddl" "<project_path>/src/rosplan_experiment_pddl/pddl/experiment_problem.pddl"
 ```
 You will need to restore the experiment_problem.pddl file after every run (use the command above).
 
-To run a simulation without gazebo open a new terminal:
+To run the experiment symbolically, open a new terminal and run the follwing commands:
 ```sh
 $ roslaunch rosplan_experiment_pddl icaps_experiment_sequential.launch
 $ rosservice call /run_planning_control  
 ```
 
 If you want the gazebo simulation to work:
-- Change 'bool useSimulationServices = false;' to 'bool useSimulationServices = true;' in both 'NoKbUpdateActionInterface.h' and 'RPActionInterface.h' placed in '.../catkin_ws/src/ROSPlan/rosplan_planning_system/include/rosplan_action_interface'
-- Change the relative path of parameter 'map' in the launch file '.../catkin_ws/src/rosplan_experiment_pddl/launch/icaps_experiment_sequential.launch'
-- You may need to change additional relative paths of launch files for the gazebo simulation services (you will see red path errors in the terminal screen when you will run the experiment)
+- Change 'bool useSimulationServices = false;' to 'bool useSimulationServices = true;' in both 'NoKbUpdateActionInterface.h' and 'RPActionInterface.h' placed in '<project_path>/src/ROSPlan/rosplan_planning_system/include/rosplan_action_interface'
+- Change the relative path of parameter 'map' in the launch file '<project_path>/src/rosplan_experiment_pddl/launch/icaps_experiment_sequential.launch'
+- You may need to change additional relative paths of launch files for the gazebo simulation services (red errors in the terminal screen will point to the paths you need to change)
 
 
 
@@ -69,12 +70,28 @@ The ROSPlan experiment is controlled by '<project_path>/src/ROSPlan/rosplan_plan
 
 # ROSPlan eveluation report:
 ## ROSPlan Overview
-As explained in the [article](https://ojs.aaai.org/index.php/ICAPS/article/view/13699/13548) and [tutorials](https://kcl-planning.github.io/ROSPlan/documentation/), ROSPlan is a modular system. It stores the PDDL domain and problem files in the Knowledge Base (KB).  A Problem interface node is used to generate a PDDL problem instance from the current state, kept in the KB. The KB is initialized by a problem.pddl file, which is updated during execution with the current KB state.  ROSPlan has a Planner Interface node, which is a wrapper for AI Planners. The planner is called through a service, which returns true if a solution is found. This interface feeds the planner with a domain file and a problem instance, and calls the planner with a command line. If a solution is found, it can be written to a file and/or published on a ROS topic. The Parsing Interface node can parse the solution given by the planner to an executable representation (a simple or ESTEREL plan). This representation can be executed by the Plan Dispatch service, which yields false if the plan fails to allow replanning by the current state in the KB. 
+As explained in the [article](https://ojs.aaai.org/index.php/ICAPS/article/view/13699/13548) and [tutorials](https://kcl-planning.github.io/ROSPlan/documentation/), ROSPlan is a modular system. It has a Knowledge Base (KB) that stores the domain and current state in PDDL format.  A Problem interface node is used to generate a PDDL problem instance from the current state, which is kept in the KB. The KB is initialized by a problem.pddl file, which is updated during execution with by the current state.  ROSPlan has a Planner Interface node, which is a wrapper for AI Planners. The planner is called through a service, which returns true if a solution is found. This interface activate the planner using a command line, sending a domain and problem files as arguments. The resulting plan is written to a file and/or published on a ROS topic. A Parsing Interface node parses the given plan to an executable representation (a simple or ESTEREL plan). This representation is executed by the Plan Dispatch service, which yields false if the plan fails to allow replanning (starting from the current state in the KB). 
 
-ROSPlan also has a Sensing Interface that can update the KB regardless of action execution, updating the KB. This sensing is defined in a configuration file. It allows automatic subscription to ROS topics, periodic calls to ROS services, and defining the transformation from a topic message to a predicate update (possibly by a python script to process the message).
+ROSPlan also has a Sensing Interface that can update the KB regardless of action execution. This sensing is defined in a configuration file. It allows automatic subscription to ROS topics, periodic calls to ROS services, and defining the transformation from a topic message to a predicate update, possibly by a python script to process the message.
 
 ## Issues found in ROSPlan:
 - ROSPlan's main branch does not support all of the planners listed in the documentation (See discussion on [Contingent-FF](https://github.com/KCL-Planning/ROSPlan/issues/254#issuecomment-822048585)).
-- ROSPlan does not have a module that handles replanning, as one would expect from reading the article. It looks like the user's responsibility (I have an open question in ROSPlan's [GitHub](https://github.com/KCL-Planning/ROSPlan/issues/254#issuecomment-822048585) on this issue). 
+- ROSPlan does not have a module that handles replanning, as one would expect from reading the article. It is the user's responsibility (see [GitHub](https://github.com/KCL-Planning/ROSPlan/issues/254#issuecomment-822048585)).
 
+
+## ROSPlan-user integration effort::
+Create a PDDL domain and problem file.
+Add an action interface C++ (and header) file for every action,these files can be copied from the ROSPlan tutorial, and they contain a function triggered when ROSPlan dispatches the action. Users should only add a call to their robot action code module. ROSPlan will automatically update the KB by the action effects.   
+For non-deterministic actions, the user must implement his own action interface C++ file. In my implementation, I changed their base interface action class so it will not update the KB automatically. However, I still use their code for subscribing and listening to the dispatch action topic and to trigger the action interface when needed. I had to implement KB updates by the result of my sensing action.  
+The CMakeLists.txt and package.xml files must be updated to build the new files and add the dependency on the user code module packages. 
+The user must implement a module that triggers the different ROSPlan services for planning, plan parsing, and plan dispatching. This module should activate replanning when needed.
+
+## Experiment results:
+As expected, since PDDL does not capture the domain observation model. Consequently, it was not reasoned about during planning; each noisy sensing action caused an undesired sequence of actions, which in some, but not all, cases can be correct if a correct observation is given afterward. 
+
+An example of when replanning cannot fix a noisy observation is when the robot receives noisy sensing that a can is at the table. It will continue to try and pick it (if it can sense pick action failed). 
+
+Replanning can help if noisy sensing is given that the can is not outside the lab. The robot will try to sense if the can is outside the corridor; correct sensing will cause replanning to bring the robot back to track.
+
+Affective replanning requires users to wisely design the PDDL domain and carefully update the KB when a possibly noisy sensing was received. 
 
