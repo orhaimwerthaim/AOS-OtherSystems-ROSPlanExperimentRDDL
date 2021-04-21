@@ -120,5 +120,6 @@ Affective replanning requires users to wisely design the PDDL domain and careful
 - The AOS should map in the same way the translation of module response to valid observations the planner can read.  
 
 #### For increased useability:
-- The AOS should also allow the project to run in a symbolic mode without activating the user code modules. The user will see the plan, actions that are currently dispatched, the progress of the belief state, and observation received. Ideally, The system will have a control panel for this and additional uses (like validation and auto-editing of PLPs). In ROSPlan, it is hard to keep track of the current state, and the user may need to activate different services from the terminal along with using the rqt plugin.  
+- The AOS should also allow the project to run in a symbolic mode without activating the user code modules. The user will see the plan, actions that are currently dispatched, the progress of the belief state, and observation received. 
+> Ideally, The system should have a control panel for this and additional uses (like validation and auto-editing of PLPs). In ROSPlan, it is hard to keep track of the current state, and the user may need to activate different services from the terminal along with using the rqt plugin.  
 
