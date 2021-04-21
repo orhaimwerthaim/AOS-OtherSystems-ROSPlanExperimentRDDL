@@ -90,7 +90,7 @@ ROSPlan also has a Sensing Interface that can update the KB regardless of action
 
 ### Time:
 - Using ROSPlan requires reading their (very good) tutorials, which can take around three days.
-- When replanning is needed since it is not covered in the tutorials, the users must investigate (understanding their code, searching the web, etc.), which can take additional three days.
+- When replanning is needed (since it is not covered in the tutorials) the users must investigate (understanding their code, searching the web, etc.), which can take additional three days.
 - For domains with special behavior like indeterministic effects (or sensing), the user must implement his own action interface class; the time taken depends on the complexity of the action behavior and the user experience with ROSPlan. For beginners working on relatively simple actions, it can take another two days of implementation and integration.
 - The user must implement his own class for controlling the planning and replanning process. This implementation requires additional knowledge in ROSPlan's code and can take around two days (with integration). 
 For a very simple first project, ROSPlan integration can take around ten working days, reasonable. 
