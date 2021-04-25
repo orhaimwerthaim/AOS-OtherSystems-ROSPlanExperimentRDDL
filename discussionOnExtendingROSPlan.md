@@ -32,9 +32,9 @@ ROSPlan components are:
 
 #### Knowledge Base (KB):
 Is used to maintain the domain and current state in a PDDL format. Additionally, it contains services to update and query the KB. 
-In their work, they decided to maintain the KB format as PDDL (-like); it was done to be backward compatible for applications already using ROSPlan. 
+The extending team, in their work, decided to maintain the KB format as PDDL (-like); it was done to be backward compatible for applications already using ROSPlan. 
 
-The RDDL description is translated to PDDL. The translation partially supports RDDL features since it is a reacher language. Users can query and update the KB as if it is written in PDDL.
+The RDDL (domain and instance) description is translated to PDDL. The translation partially supports RDDL features since RDDL is richer than PDDL. Users can query and update the KB as if it is written in PDDL.
 * I think it adds complexity to users who describe their problem in RDDL but query and manipulate in PDDL.
 
 #### Problem Interface:
