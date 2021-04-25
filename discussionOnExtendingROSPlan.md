@@ -41,5 +41,6 @@ His job is to generate 'problem.pddl' files by the current KB state. They extend
 
 Even in cases where RDDL domains are not be faithfully translated to PDDL, the planning process remains accurate since the RDDL planner receives the original RDDL domain, which is not altered. Unlike the 'instance.rddl,' which is changed by the current state in KB.
 
-#### Plan Dispatch:
-A new online plan dispatcher was implemented. It communicates with the planner using the RddlSim protocol (see [IPPC]()), making the parsing and planning interfaces redundant.
+#### Plan Dispatch (PD):
+A new online plan dispatcher was implemented. It communicates with the planner using the RddlSim protocol (see [IPPC](https://ipc2018-probabilistic.bitbucket.io/#)), making the parsing and planning interfaces redundant. The planner sends the PD actions for execution, and the PD returns the next state for the planner to continue planning. From looking at [their description](http://kcl-planning.github.io/ROSPlan//tutorials/tutorial_12), the [IPPC](https://ipc2018-probabilistic.bitbucket.io/#) official web site, and from the [PROST article](https://ojs.aaai.org/index.php/ICAPS/article/download/13518/13367)  I see that there is no support for partially observable domains (not in either ROSPlan, IPPC, or PROST).
+It is important to mention that the [RddlSim protocol](https://github.com/ssanner/rddlsim/blob/master/PROTOCOL.txt) do support partial-observability.
