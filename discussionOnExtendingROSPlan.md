@@ -58,7 +58,7 @@ Moreover, after examining ROPlsan's documentation, tutorials, and part of their 
 - **There is a KB** that stores the domain and current state, along with interfaces to query and update them. _Implementing such a component along with RESTfull infrastructure can take one month of work_.
 **The planning Interface** allows a planner activation based on the KB data. _Its work estimation is included in the parser_.
 **ROSPlan has a parser** that translates the planner's plan to a uniform executable format. _It can take three weeks to implement a uniform plan format and connect it to a planner's output with some visualization for debugging (other planners can be added in the future)_.
-**The Plan Dispatch (DP)** activates the plan, _we need to implement a component that activates the user modules on the target framework; this component should also translate the user modules' responses to observations coherent with the domain and protocol. _It may take a month of work due to the complexity of translating the module activations and responses_.
+**The Plan Dispatch (DP)** activates the plan, we need to implement a component that activates the user modules on the target framework; this component should also translate the user modules' responses to observations coherent with the domain and protocol. _It may take a month of work due to the complexity of translating the module activations and responses_.
 **ROSPlan's passive sensing component** will not be part of this implementation since POMDP cannot model it.
 
 > So in approximately three months, we can (hopefully) get a more usable and user-friendly system that best fits our needs. 
