@@ -2,21 +2,14 @@
 
 # Should the AOS planning engine extend or emulate ROSPlan? 
 ## General 
-As part of our effort to design and implement the AOS Planning (and execution) engine, we examine ROSPlan, an existing and mature system recognized in the field. 
+During the committee meeting to approve the AOS research proposal, it was strongly recommended that we examine extending ROSPlan's codebase because many roboticists are familiar with it and may deter from learning and trying an unfamiliar new system after experiencing success using ROSPlan. Alternatively, for the same reason, we may want to emulate its "look and feel." Moreover, extending ROSPlan would be a good idea since it results from five years of development. One may say that a single P.h.D student will not finish this project during his P.h.D, consequently wasting his time and the scholarship given to him.
 
-Should we?:
+So should we?:
 1. Extend ROSPlan's implementation so it can fully support POMDPs.
 2. Implement a different planning engine, which preserves ROSPlan's interfaces and user experience.
-3. Implement a different planning engine without preserving the interfaces and user experience. 
+3. Implement a different planning engine without preserving the interfaces and user experience.
 
-The purpose of this document is to be a base for discussion that answers this question. And maybe to raise alternative ideas to ROSPlans implementation. 
-
-### Why do we consider this option:
-Extending ROSPlan or emulating its "look and feel" was raised by the committee who approved the AOS research proposal, and I can say it sounded like a good idea for me.
-
-- We may want to maintain ROSPlan's interface because many roboticists are familiar with it. These roboticists may deter from learning and trying an unfamiliar new system after experiencing success using ROSPlan.
-
-- We may want to extend ROSPlan's codebase because it is a result of more than five years of software development. Moreover, one may say that a single P.h.D student will not finish this project during his P.h.D, consequently wasting his time and the scholarship given to him.
+The purpose of this document is to be a base for discussion that answers this question. And maybe to raise alternative ideas to ROSPlans implementation.
 
 ## Existing work overview 
 I'll begin with an overview of an article written by members of the ROSPlan team, which extends ROSPlan to (partially) support POMDPs described by RDDL.
