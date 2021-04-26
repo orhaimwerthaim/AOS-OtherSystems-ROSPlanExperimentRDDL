@@ -46,9 +46,9 @@ It is important to mention that the [RddlSim protocol](https://github.com/ssanne
 I understand why the ROSPlan team chose to maintain their internal data representation and current PDDL interfaces. They have an existing working system with a relatively large number of experiments, collaborations, and applications. By preserving the interfaces, even in a forced way, they can upgrade to probabilistic planning all of their working applications and test the new RDDL module in multiple experiments at a low cost. 
 > For us, I don't think it is a good choice.
 
-** We should not fully emulate ROSPlan's service** because it is stitched for PDDL, which is rich but not enough for POMDPs. Since we don't need to be backward compatible as them, why force ourselves to a representation not answering our needs (a single state rather than a belief state and more).
+**We should not fully emulate ROSPlan's service** because it is stitched for PDDL, which is rich but not enough for POMDPs. Since we don't need to be backward compatible as them, why force ourselves to a representation not answering our needs (a single state rather than a belief state and more).
 
-** We should not try to preserve their interface with modifications to support POMDPs** because this direction requires a tremendous amount of work. It requires extending multiple components like launch files, ROS nodes, and services, only to give the same feeling as ROSPlan. Even if we succeed in going this way, I think it will over-complicate the system, consequently delaying or even preventing us from fulfilling the AOS vision.
+**We should not try to preserve their interface with modifications to support POMDPs** because this direction requires a tremendous amount of work. It requires extending multiple components like launch files, ROS nodes, and services, only to give the same feeling as ROSPlan. Even if we succeed in going this way, I think it will over-complicate the system, consequently delaying or even preventing us from fulfilling the AOS vision.
 
 Moreover, after examining ROPlsan's documentation, tutorials, and part of their code, I don't think we should extend their work for the following reasons:
 - **Tight connection to ROS**: while ROSPlan cannot be separated from ROS, the AOS has a broader vision than to be connected to one specific robot system.
