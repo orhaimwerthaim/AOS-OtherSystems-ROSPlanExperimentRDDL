@@ -54,12 +54,12 @@ Moreover, after examining ROPlsan's documentation, tutorials, and part of their 
 - **Tight connection to ROS**: while ROSPlan cannot be separated from ROS, the AOS has a broader vision than to be connected to one specific robot system.
 - More specifically, the **ROSPlan's interfaces**: They invested a lot of effort generating interfaces using ROS communication. I think it is wrong; the planning engine interfaces should use general cross-platform techniques, common in the industry. Specifically, I am thinking about [RESTful API](https://restfulapi.net/), we'll use HTTP requests to communicate with the planning engine in the acceptable XML and JSON formats. There are also common user-friendly ways to document such interfaces (see [swagger](https://swagger.io/docs/specification/about/)). Using RESTfull APIs allows easy debugging, testing, and evaluation of the system with off-the-shelf applications (see [POSTMan](https://www.postman.com/)). Our planning engine can be integrated with ROS using a single ROS node, as we did in ROS-POMDP. 
 
-**Which (relevant) code was implemented in ROSPlan, and how long it is to implement.**  
+- **Which (relevant) code was implemented in ROSPlan, and how long it is to implement.**  
 - **There is a KB** that stores the domain and current state, along with interfaces to query and update them. _Implementing such a component along with RESTfull infrastructure can take one month of work_.
-- **The planning Interface** allows a planner activation based on the KB data. _Its work estimation is included in the parser_.
- - **ROSPlan has a parser** that translates the planner's plan to a uniform executable format. _It can take three weeks to implement a uniform plan format and connect it to a planner's output with some visualization for debugging (other planners can be added in the future)_.
-- **The Plan Dispatch (DP)** activates the plan, _we need to implement a component that activates the user modules on the target framework; this component should also translate the user modules' responses to observations coherent with the domain and protocol. _It may take a month of work due to the complexity of translating the module activations and responses_.
-- **ROSPlan's passive sensing component** will not be part of this implementation since POMDP cannot model it.
+**The planning Interface** allows a planner activation based on the KB data. _Its work estimation is included in the parser_.
+**ROSPlan has a parser** that translates the planner's plan to a uniform executable format. _It can take three weeks to implement a uniform plan format and connect it to a planner's output with some visualization for debugging (other planners can be added in the future)_.
+**The Plan Dispatch (DP)** activates the plan, _we need to implement a component that activates the user modules on the target framework; this component should also translate the user modules' responses to observations coherent with the domain and protocol. _It may take a month of work due to the complexity of translating the module activations and responses_.
+**ROSPlan's passive sensing component** will not be part of this implementation since POMDP cannot model it.
 
 > So in approximately three months, we can (hopefully) get a more usable and user-friendly system that best fits our needs. 
 
