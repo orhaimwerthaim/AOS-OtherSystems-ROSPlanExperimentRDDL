@@ -2,14 +2,14 @@
 
 # Should the AOS planning engine extend or emulate ROSPlan? 
 ## General 
-During the committee meeting to approve the AOS research proposal, it was strongly recommended that we examine extending ROSPlan's codebase because many roboticists are familiar with it and may deter from learning and trying an unfamiliar new system after experiencing success using ROSPlan. Alternatively, for the same reason, we may want to emulate its "look and feel." Moreover, extending ROSPlan would be a good idea since it results from five years of development. One may say that a single P.h.D student will not finish this project during his P.h.D, consequently wasting his time and the scholarship given to him.
+During the committee meeting to approve the AOS research proposal, it was strongly recommended that we examine extending ROSPlan's codebase because many roboticists are familiar with it and may deter from learning and trying an unfamiliar new system after experiencing success using ROSPlan. Alternatively, for the same reason, we may want to (only) emulate its "look and feel." Moreover, extending ROSPlan would be a good idea since it results from five years of development. And one may say that a single P.h.D student will not finish this project during his P.h.D, consequently wasting his time and the scholarship given to him.
 
 So should we?:
 1. Extend ROSPlan's implementation so it can fully support POMDPs.
 2. Implement a different planning engine, which preserves ROSPlan's interfaces and user experience.
 3. Implement a different planning engine without preserving the interfaces and user experience.
 
-The purpose of this document is to be a base for discussion that answers this question. And maybe to raise alternative ideas to ROSPlans implementation.
+The purpose of this document is to be a base for discussion that answers this question. And maybe to raise alternative ideas to for implementation.
 
 ## Existing work overview 
 I'll begin with an overview of an article written by members of the ROSPlan team, which extends ROSPlan to (partially) support POMDPs described by RDDL.
@@ -25,10 +25,11 @@ ROSPlan components are:
 
 #### Knowledge Base (KB):
 Is used to maintain the domain and current state in a PDDL format. Additionally, it contains services to update and query the KB. 
-The extending team, in their work, decided to maintain the KB format as PDDL (-like); it was done to be backward compatible for applications already using ROSPlan. 
+The extending team, in their work, decided to maintain the KB in a PDDL(-like) format; it was done to be backward compatible for applications already using ROSPlan. 
 
-The RDDL (domain and instance) description is translated to PDDL. The translation partially supports RDDL features since RDDL is richer than PDDL. Users can query and update the KB as if it is written in PDDL.
-* I think it adds complexity to users who describe their problem in RDDL but query and manipulate in PDDL.
+The RDDL (domain and instance) description is translated to PDDL. And the users can query and update the KB as if it is written in PDDL.
+* The translation partially supports RDDL features since RDDL is richer than PDDL.
+* I think it adds complexity to users who describe their problem in RDDL but query and manipulate the KB using PDDL.
 
 #### Problem Interface:
 His job is to generate 'problem.pddl' files by the current KB state. They extended this component so it can also generate 'instance.rddl' files. This additional capability allows the use of deterministic PDDL planners next to probabilistic planners, regardless of how the original problem was described (PDDL or RDDL). 
